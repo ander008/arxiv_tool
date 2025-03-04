@@ -1,0 +1,61 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 防止页面整体滚动 */
+}
+
+.full-height {
+    height: 100vh; /* 确保容器占满视口高度 */
+}
+
+.sidebar {
+    width: 300px; /* 固定宽度代替 col-md-3 */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 占满父容器高度 */
+}
+
+/* 左侧和右侧栏特定样式 */
+.left-sidebar {
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.right-sidebar {
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+.main-content {
+    padding: 20px;
+    flex-grow: 1; /* 填充剩余空间 */
+    height: 100%; /* 占满父容器高度 */
+}
+
+.pdf-viewer {
+    width: 100%;
+    border: none;
+    flex-grow: 1; /* 自适应剩余高度 */
+}
+
+.chat-area {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow-y: auto; /* 内容超出时滚动 */
+    flex-grow: 1; /* 自适应剩余高度 */
+}
+
+/* 针对搜索结果的样式 */
+#results {
+    overflow-y: auto;
+    flex-grow: 1; /* 自适应剩余高度 */
+}
+
+/* 调整折叠时的样式 */
+.collapse:not(.show) {
+    display: none;
+}

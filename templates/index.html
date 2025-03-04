@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arxiv论文搜索</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid d-flex flex-row full-height">
+        <!-- 左侧：搜索区和结果列表区（可折叠） -->
+        <div class="sidebar left-sidebar collapse show" id="leftSidebar">
+            <div class="accordion flex-shrink-0" id="settingsAccordion">
+                <div class="accordion-item">
+                    <h4 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#searchCollapse" aria-expanded="true" 
+                                aria-controls="searchCollapse">
+                            论文搜索
+                        </button>
+                    </h4>
+                    <div id="searchCollapse" class="accordion-collapse collapse show" 
+                        data-bs-parent="#settingsAccordion">
+                        <div class="accordion-body">
+                            <form id="searchForm">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="输入搜索关键词" id="keywords">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">关键词搜索原则</label>
+                                    <select class="form-select" id="category">
+                                        <option value="all">内容</option>
+                                        <option value="ti">题目</option>
+                                        <option value="abs">摘要</option>
+                                        <option value="au">作者</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dateRange" class="form-label">日期范围</label>
+                                    <select class="form-select" id="dateRange">
+                                        <option value="all">所有时间</option>
+                                        <option value="week">过去一周</option>
+                                        <option value="month">过去一个月</option>
+                                        <option value="year">过去一年</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="selectivity-rule" class="form-label">筛选规则</label>
+                                    <select class="form-select" id="selectivity-rule">
+                                        <option value="date">时间最近</option>
+                                        <option value="correlation">最相关</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" type="submit">搜索</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="flex-shrink-0">
+            
+            <h5>搜索结果</h5>
+            <div id="results" class="flex-grow-1 overflow-auto">
+                <div class="accordion" id="resultsAccordion">
+                    <!-- 示例论文条目 -->
+                    
+                    <!-- 更多论文条目将动态添加 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 中间：PDF展示区 -->
+        <div class="main-content flex-grow-1 d-flex flex-column">
+            <div class="d-flex justify-content-between mb-2 flex-shrink-0">
+                <!-- 左侧按钮组 -->
+                <div>
+                    <button class="btn btn-outline-primary me-2" 
+                            type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#leftSidebar">
+                        折叠搜索
+                    </button>
+                    <!-- 隐藏的文件上传输入 -->
+                    <input type="file" 
+                        id="pdfUpload" 
+                        accept=".pdf" 
+                        style="display: none;">
+                    <label for="pdfUpload" 
+                        class="btn btn-outline-primary">
+                        上传PDF
+                    </label>
+                    <!-- 新增：在线PDF链接输入 -->
+                    <input type="url" 
+                    id="pdfLinkInput" 
+                    class="form-control d-inline-block" 
+                    style="width: 200px;" 
+                    placeholder="输入在线PDF链接">
+                    <button class="btn btn-outline-primary" 
+                            type="button" 
+                            id="loadPdfLink">
+                        加载
+                    </button>
+                </div>
+
+                <!-- 中间标题 -->
+                <h4 class="m-0 align-self-center">论文阅读</h4>
+
+                <!-- 右侧按钮 -->
+                <button class="btn btn-outline-primary" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#rightSidebar">
+                    折叠对话
+                </button>
+            </div>
+
+            <iframe id="pdfViewer" 
+                    class="pdf-viewer flex-grow-1" 
+                    src="" 
+                    frameborder="0"></iframe>
+        </div>
+
+
+
+        <!-- 右侧：大模型配置区和对话区（可折叠） -->
+        <div class="sidebar right-sidebar collapse show" id="rightSidebar">
+            <div class="accordion flex-shrink-0" id="settingsAccordion">
+                <div class="accordion-item">
+                    <h4 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#settingsCollapse" aria-expanded="true" 
+                                aria-controls="settingsCollapse">
+                            模型设置
+                        </button>
+                    </h4>
+                    <div id="settingsCollapse" class="accordion-collapse collapse show" 
+                        data-bs-parent="#settingsAccordion">
+                        <div class="accordion-body">
+                            <form id="settingsForm">
+                                <div class="mb-3">
+                                    <label for="baseUrl" class="form-label">基础URL</label>
+                                    <input type="text" class="form-control" id="baseUrl">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="apiKey" class="form-label">API密钥</label>
+                                    <input type="text" class="form-control" id="apiKey">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="model" class="form-label">模型</label>
+                                    <input type="text" class="form-control" id="model">
+                                </div>
+                                <button type="button" class="btn btn-primary">保存更改</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="flex-shrink-0">
+            
+            <h5 class="flex-shrink-0">对话区</h5>
+            <div class="chat-area flex-grow-1" id="chatArea">
+                <!-- 对话历史将在这里显示 -->
+            </div>
+
+            <form id="chatForm" class="flex-shrink-0 mt-2">
+                <div class="mb-2">
+                    <select class="form-select" id="functionSelect">
+                        <option value="translate">翻译</option>
+                        <option value="summarize">总结</option>
+                        <option value="explain">解释</option>
+                        <option value="multichat">多轮对话</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="输入消息" id="chatInput">
+                    <button class="btn btn-primary" type="submit">发送</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script src="../static/func.js"></script>
+</body>
+</html>
