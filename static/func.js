@@ -439,3 +439,23 @@ document.getElementById('chatForm').addEventListener('submit', async function(e)
     chatArea.innerHTML += `<div>${result}</div>`;
     chatInput.value = ''; // 清空输入框
 });
+
+document.getElementById('exportChat').addEventListener('click', function() {
+    const messages = document.getElementById('chatMessages').innerText;
+    
+    if (!messages.trim()) {
+        alert('暂无聊天记录可导出');
+        return;
+    }
+
+    // 创建并下载文本文件
+    const blob = new Blob([messages], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat_history_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+});

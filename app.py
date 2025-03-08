@@ -11,7 +11,7 @@ model_settings = {
     "api_key": "1",
     "model": "deepseek-r1:70b"
 }
-model = LLMService(model_settings["base_url"], model_settings["api_key"], model_settings["model"],0.5)
+model = LLMService(model_settings["base_url"], model_settings["api_key"], model_settings["model"],1)
 SERPAPI_KEY = "ef6533809d34c615ee1b38ab0dd87fe1b09b4d47f667a53aabd2531ef5b45143"
 
 @app.route('/')
@@ -100,8 +100,7 @@ def summarize():
             准确性：忠实反映段落原意，避免歪曲或添加未提及的内容。
             学术语气：使用客观、正式的语言，符合学术表达规范。
             上下文感知：根据段落内容推测可能的学术背景（如学科或研究主题），确保总结与整体语境相关。
-            输出语言: 以中文语言进行回答。
-            以下是待总结的段落：{message}。请基于上述要求提供总结。"""
+            以下是待总结的段落：{message}。请基于上述要求提供总结。用中文进行回答。"""
     input_variables = {"message"}
     if model_settings["base_url"] and model_settings["api_key"] and model_settings["model"]:
         chain = model.generate_response(prompt_template,input_variables)
@@ -135,8 +134,7 @@ def explain():
                 逻辑分析：说明段落中观点之间的逻辑关系，以及它们如何支持论文的整体论点。
                 简明总结：在最后提供一段简洁的总结，概括段落的核心思想。
                 语言风格：使用客观、学术化的语言，避免主观臆断或过于口语化的表达。
-                输出语言: 以中文语言进行回答。
-                以下是待解释的段落：{message}。请基于上述要求进行分析和解释。"""
+                以下是待解释的段落：{message}。请基于上述要求进行分析和解释。用中文进行回答。"""
     input_variables = {"message"}
     if model_settings["base_url"] and model_settings["api_key"] and model_settings["model"]:
         chain = model.generate_response(prompt_template,input_variables)
